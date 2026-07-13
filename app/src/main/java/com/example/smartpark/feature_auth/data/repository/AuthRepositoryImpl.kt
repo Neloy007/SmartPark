@@ -69,11 +69,6 @@ class AuthRepositoryImpl @Inject constructor(
                 .set(user)
                 .await()
 
-            firestore
-                .collection("users")
-                .document(uid)
-                .set(user)
-                .await()
 
             Result.success(Unit)
 

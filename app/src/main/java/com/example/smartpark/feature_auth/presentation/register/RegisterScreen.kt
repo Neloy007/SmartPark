@@ -73,6 +73,12 @@ fun RegisterScreen(
             label = { Text("Full Name") },
             leadingIcon = {
                 Icon(Icons.Default.Person, null)
+            },
+            isError = state.nameError != null,
+            supportingText = {
+                state.nameError?.let {
+                    Text(it)
+                }
             }
         )
 
@@ -87,6 +93,12 @@ fun RegisterScreen(
             label = { Text("Email") },
             leadingIcon = {
                 Icon(Icons.Default.Email, null)
+            },
+            isError = state.emailError != null,
+            supportingText = {
+                state.emailError?.let {
+                    Text(it)
+                }
             }
         )
 
@@ -101,6 +113,12 @@ fun RegisterScreen(
             label = { Text("Phone") },
             leadingIcon = {
                 Icon(Icons.Default.Phone, null)
+            },
+            isError = state.phoneError != null,
+            supportingText = {
+                state.phoneError?.let {
+                    Text(it)
+                }
             }
         )
 
@@ -115,6 +133,12 @@ fun RegisterScreen(
             label = { Text("Vehicle Number") },
             leadingIcon = {
                 Icon(Icons.Default.DirectionsCar, null)
+            },
+            isError = state.vehicleError != null,
+            supportingText = {
+                state.vehicleError?.let {
+                    Text(it)
+                }
             }
         )
 
@@ -137,11 +161,12 @@ fun RegisterScreen(
                     }
                 ) {
                     Icon(
-                        if (passwordVisible)
-                            Icons.Default.Visibility
-                        else
-                            Icons.Default.VisibilityOff,
-                        null
+                        imageVector =
+                            if (passwordVisible)
+                                Icons.Default.Visibility
+                            else
+                                Icons.Default.VisibilityOff,
+                        contentDescription = null
                     )
                 }
             },
@@ -149,7 +174,13 @@ fun RegisterScreen(
                 if (passwordVisible)
                     VisualTransformation.None
                 else
-                    PasswordVisualTransformation()
+                    PasswordVisualTransformation(),
+            isError = state.passwordError != null,
+            supportingText = {
+                state.passwordError?.let {
+                    Text(it)
+                }
+            }
         )
 
         Spacer(Modifier.height(16.dp))
@@ -171,11 +202,12 @@ fun RegisterScreen(
                     }
                 ) {
                     Icon(
-                        if (confirmVisible)
-                            Icons.Default.Visibility
-                        else
-                            Icons.Default.VisibilityOff,
-                        null
+                        imageVector =
+                            if (confirmVisible)
+                                Icons.Default.Visibility
+                            else
+                                Icons.Default.VisibilityOff,
+                        contentDescription = null
                     )
                 }
             },
@@ -183,18 +215,32 @@ fun RegisterScreen(
                 if (confirmVisible)
                     VisualTransformation.None
                 else
-                    PasswordVisualTransformation()
+                    PasswordVisualTransformation(),
+            isError = state.confirmPasswordError != null,
+            supportingText = {
+                state.confirmPasswordError?.let {
+                    Text(it)
+                }
+            }
         )
 
         Spacer(Modifier.height(30.dp))
 
         Button(
+            enabled = !state.isLoading,
             onClick = {
                 viewModel.onEvent(RegisterEvent.RegisterClicked)
             },
             modifier = Modifier.fillMaxWidth()
         ) {
-            Text("Create Account")
+            if (state.isLoading) {
+                CircularProgressIndicator(
+                    modifier = Modifier.size(22.dp),
+                    strokeWidth = 2.dp
+                )
+            } else {
+                Text("Create Account")
+            }
         }
 
         Spacer(Modifier.height(16.dp))
