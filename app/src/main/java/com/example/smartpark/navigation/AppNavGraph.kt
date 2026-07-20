@@ -5,10 +5,13 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.example.smartpark.feature_admin.presentation.AdminScreen
 import com.example.smartpark.feature_auth.presentation.forgetPassword.ForgotPasswordScreen
 import com.example.smartpark.feature_auth.presentation.login.LoginScreen
 import com.example.smartpark.feature_auth.presentation.register.RegisterScreen
+import com.example.smartpark.feature_home.presentation.HomeRoute
 import com.example.smartpark.feature_home.presentation.HomeScreen
+import com.example.smartpark.feature_map.presentation.MapScreen
 import com.example.smartpark.feature_profile.presentation.ProfileScreen
 import com.example.smartpark.feature_splash.presentaion.SplashViewModel
 import com.example.smartpark.feature_splash.presentation.SplashScreen
@@ -48,9 +51,11 @@ fun AppNavGraph(
         }
 
         composable(Routes.Home) {
-            HomeScreen(
+
+            HomeRoute(
                 navController = navController
             )
+
         }
 
         composable(Routes.Profile) {
@@ -71,6 +76,18 @@ fun AppNavGraph(
 
             )
 
+        }
+
+        composable(Routes.Map){
+
+            MapScreen()
+
+        }
+
+        composable(Routes.Admin) {
+            AdminScreen(
+                navController = navController
+            )
         }
     }
 }

@@ -8,6 +8,8 @@ sealed interface LoginEffect {
 
     data object NavigateToHome : LoginEffect
 
+    data object NavigateToAdmin : LoginEffect
+
     data object NavigateToRegister : LoginEffect
 
     data object NavigateToForgotPassword : LoginEffect

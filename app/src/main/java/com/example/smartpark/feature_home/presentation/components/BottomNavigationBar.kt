@@ -11,41 +11,65 @@ import androidx.compose.ui.graphics.Color
 
 @Composable
 fun BottomNavigationBar(
+
     selectedRoute: String,
+
+    isAdmin: Boolean,
+
     onItemSelected: (String) -> Unit
+
 ) {
 
     NavigationBar(
+
         containerColor = MaterialTheme.colorScheme.surface
+
     ) {
 
-        bottomNavItems.forEach { item ->
+        bottomNavItems(isAdmin).forEach { item ->
 
             NavigationBarItem(
 
                 selected = selectedRoute == item.route,
 
                 onClick = {
+
                     onItemSelected(item.route)
+
                 },
 
                 icon = {
+
                     Icon(
+
                         imageVector = item.icon,
+
                         contentDescription = item.title
+
                     )
+
                 },
 
                 label = {
-                    Text(item.title)
+
+                    Text(
+                        text = item.title
+                    )
+
                 },
 
                 colors = NavigationBarItemDefaults.colors(
+
                     selectedIconColor = Color.White,
+
                     selectedTextColor = Color(0xFF2E7D32),
+
                     indicatorColor = Color(0xFF2E7D32),
+
                     unselectedIconColor = Color.Gray,
+
                     unselectedTextColor = Color.Gray
+
                 )
 
             )

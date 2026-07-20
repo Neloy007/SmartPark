@@ -18,30 +18,36 @@ data class BottomNavItem(
 
 )
 
-val bottomNavItems = listOf(
+fun bottomNavItems(
+    isAdmin: Boolean
+): List<BottomNavItem> {
 
-    BottomNavItem(
-        title = "Home",
-        route = Routes.Home,
-        icon = Icons.Default.Home
-    ),
+    return listOf(
 
-    BottomNavItem(
-        title = "Map",
-        route = Routes.Map,
-        icon = Icons.Default.Map
-    ),
+        BottomNavItem(
+            if (isAdmin) "Admin" else "Home",
+            if (isAdmin) Routes.Admin else Routes.Home,
+            Icons.Default.Home
+        ),
 
-    BottomNavItem(
-        title = "Bookings",
-        route = Routes.Booking,
-        icon = Icons.Default.Bookmark
-    ),
+        BottomNavItem(
+            "Map",
+            Routes.Map,
+            Icons.Default.Map
+        ),
 
-    BottomNavItem(
-        title = "Profile",
-        route = Routes.Profile,
-        icon = Icons.Default.Person
+        BottomNavItem(
+            "Bookings",
+            Routes.Booking,
+            Icons.Default.Bookmark
+        ),
+
+        BottomNavItem(
+            "Profile",
+            Routes.Profile,
+            Icons.Default.Person
+        )
+
     )
 
-)
+}

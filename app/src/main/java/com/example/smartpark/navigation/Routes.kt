@@ -19,6 +19,8 @@ object Routes {
 
     const val Profile = "profile"
 
+    const val Admin = "Admin"
+
     // Future
     const val ParkingDetails = "parking_details"
 

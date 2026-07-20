@@ -98,23 +98,36 @@ class LoginViewModel @Inject constructor(
                 password = password
             )
 
-            result
-                .onSuccess {
+            result.onSuccess {
 
-                    _effect.emit(
-                        LoginEffect.NavigateToHome
-                    )
+                repository
+                    .getCurrentUserRole()
+                    .onSuccess { role ->
 
-                }
-                .onFailure { exception ->
+                        if (role == "ADMIN") {
 
-                    _effect.emit(
-                        LoginEffect.ShowSnackbar(
-                            exception.message ?: "Login failed."
+                            _effect.emit(
+                                LoginEffect.NavigateToAdmin
+                            )
+
+                        } else {
+
+                            _effect.emit(
+                                LoginEffect.NavigateToHome
+                            )
+
+                        }
+
+                    }
+                    .onFailure {
+
+                        _effect.emit(
+                            LoginEffect.NavigateToHome
                         )
-                    )
 
-                }
+                    }
+
+            }
 
             _state.update {
                 it.copy(isLoading = false)

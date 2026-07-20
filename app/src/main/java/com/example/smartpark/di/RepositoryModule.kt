@@ -1,9 +1,13 @@
 package com.example.smartpark.di
 
+import com.example.smartpark.feature_admin.data.repository.AdminRepositoryImpl
+import com.example.smartpark.feature_admin.domain.repository.AdminRepository
 import com.example.smartpark.feature_auth.data.repository.AuthRepositoryImpl
 import com.example.smartpark.feature_auth.domain.repository.AuthRepository
 import com.example.smartpark.feature_home.data.repository.ParkingRepositoryImpl
 import com.example.smartpark.feature_home.domain.repository.ParkingRepository
+import com.example.smartpark.feature_map.data.repository.MapRepositoryImpl
+import com.example.smartpark.feature_map.domain.repository.MapRepository
 import com.example.smartpark.feature_profile.data.repository.ProfileRepositoryImpl
 import com.example.smartpark.feature_profile.domain.repository.ProfileRepository
 import com.example.smartpark.feature_user.data.repository.UserRepositoryImpl
@@ -41,4 +45,16 @@ abstract class RepositoryModule {
     abstract fun bindProfileRepository(
         impl: ProfileRepositoryImpl
     ): ProfileRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindMapRepository(
+        impl: MapRepositoryImpl
+    ): MapRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindAdminRepository(
+        impl: AdminRepositoryImpl
+    ): AdminRepository
 }

@@ -23,4 +23,6 @@ interface AuthRepository {
 
     fun isLoggedIn(): Boolean
 
+    suspend fun getCurrentUserRole(): Result<String>
+
 }

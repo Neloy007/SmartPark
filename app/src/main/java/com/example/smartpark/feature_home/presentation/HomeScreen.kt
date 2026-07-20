@@ -89,18 +89,15 @@ fun HomeScreen(
 
             BottomNavigationBar(
 
-                selectedRoute = Routes.Home,
+                selectedRoute = if (state.currentUser?.role == "ADMIN")
+                    Routes.Admin
+                else
+                    Routes.Home,
+
+                isAdmin = state.currentUser?.role == "ADMIN",
 
                 onItemSelected = { route ->
-
-                    navController.navigate(route) {
-
-                        launchSingleTop = true
-
-                        restoreState = true
-
-                    }
-
+                    navController.navigate(route)
                 }
 
             )

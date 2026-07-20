@@ -111,4 +111,29 @@ class AuthRepositoryImpl @Inject constructor(
 
     }
 
+    override suspend fun getCurrentUserRole(): Result<String> {
+
+        return try {
+
+            val uid = auth.currentUser?.uid
+                ?: return Result.failure(Exception("User not logged in"))
+
+            val snapshot = firestore
+                .collection("users")
+                .document(uid)
+                .get()
+                .await()
+
+            val role = snapshot.getString("role") ?: "DRIVER"
+
+            Result.success(role)
+
+        } catch (e: Exception) {
+
+            Result.failure(e)
+
+        }
+
+    }
+
 }

@@ -81,23 +81,45 @@ fun LoginScreen(
                 LoginEffect.NavigateToHome -> {
 
                     navController.navigate(Routes.Home) {
+
                         popUpTo(Routes.Login) {
                             inclusive = true
                         }
+
+                    }
+
+                }
+
+                LoginEffect.NavigateToAdmin -> {
+
+                    navController.navigate(Routes.Admin) {
+
+                        popUpTo(Routes.Login) {
+                            inclusive = true
+                        }
+
                     }
 
                 }
 
                 LoginEffect.NavigateToRegister -> {
+
                     navController.navigate(Routes.Register)
+
                 }
 
                 LoginEffect.NavigateToForgotPassword -> {
+
                     navController.navigate(Routes.ForgotPassword)
+
                 }
 
                 is LoginEffect.ShowSnackbar -> {
-                    snackbarHostState.showSnackbar(effect.message)
+
+                    snackbarHostState.showSnackbar(
+                        effect.message
+                    )
+
                 }
 
             }
