@@ -9,6 +9,7 @@ import com.example.smartpark.feature_auth.presentation.forgetPassword.ForgotPass
 import com.example.smartpark.feature_auth.presentation.login.LoginScreen
 import com.example.smartpark.feature_auth.presentation.register.RegisterScreen
 import com.example.smartpark.feature_home.presentation.HomeScreen
+import com.example.smartpark.feature_profile.presentation.ProfileScreen
 import com.example.smartpark.feature_splash.presentaion.SplashViewModel
 import com.example.smartpark.feature_splash.presentation.SplashScreen
 
@@ -50,6 +51,26 @@ fun AppNavGraph(
             HomeScreen(
                 navController = navController
             )
+        }
+
+        composable(Routes.Profile) {
+
+            ProfileScreen(
+
+                onNavigateLogin = {
+
+                    navController.navigate(Routes.Login) {
+
+                        popUpTo(Routes.Home) {
+                            inclusive = true
+                        }
+
+                    }
+
+                }
+
+            )
+
         }
     }
 }

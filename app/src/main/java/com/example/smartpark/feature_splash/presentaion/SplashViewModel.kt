@@ -1,5 +1,6 @@
 package com.example.smartpark.feature_splash.presentaion
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.smartpark.navigation.Routes
@@ -8,8 +9,6 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharedFlow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
@@ -22,10 +21,10 @@ class SplashViewModel @Inject constructor(
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(SplashState())
-    val state: StateFlow<SplashState> = _state.asStateFlow()
+    val state = _state.asStateFlow()
 
     private val _effect = MutableSharedFlow<SplashEffect>()
-    val effect: SharedFlow<SplashEffect> = _effect.asSharedFlow()
+    val effect = _effect.asSharedFlow()
 
     init {
         onEvent(SplashEvent.Initialize)
@@ -41,16 +40,20 @@ class SplashViewModel @Inject constructor(
 
         viewModelScope.launch {
 
-            _state.update {
-                it.copy(isLoading = true)
-            }
+            _state.update { it.copy(isLoading = true) }
 
-            // Show splash animation
             delay(2500)
+
+//            firebaseAuth.signOut()
+
 
             val currentUser = firebaseAuth.currentUser
 
+            Log.d("SmartPark", "Current User = $currentUser")
+
             if (currentUser == null) {
+
+                Log.d("SmartPark", "Navigate -> Login")
 
                 _effect.emit(
                     SplashEffect.Navigate(Routes.Login)
@@ -58,26 +61,17 @@ class SplashViewModel @Inject constructor(
 
             } else {
 
-                /*
-                 * Later we'll replace this section
-                 * with Firestore role checking.
-                 *
-                 * Example:
-                 *
-                 * users/{uid}
-                 *      role = DRIVER
-                 */
+                Log.d("SmartPark", "Navigate -> Home")
 
                 _effect.emit(
                     SplashEffect.Navigate(Routes.Home)
                 )
+
             }
 
             _state.update {
                 it.copy(isLoading = false)
             }
-
         }
     }
-
 }

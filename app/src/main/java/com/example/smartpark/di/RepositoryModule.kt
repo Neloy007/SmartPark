@@ -4,6 +4,8 @@ import com.example.smartpark.feature_auth.data.repository.AuthRepositoryImpl
 import com.example.smartpark.feature_auth.domain.repository.AuthRepository
 import com.example.smartpark.feature_home.data.repository.ParkingRepositoryImpl
 import com.example.smartpark.feature_home.domain.repository.ParkingRepository
+import com.example.smartpark.feature_profile.data.repository.ProfileRepositoryImpl
+import com.example.smartpark.feature_profile.domain.repository.ProfileRepository
 import com.example.smartpark.feature_user.data.repository.UserRepositoryImpl
 import com.example.smartpark.feature_user.domain.repository.UserRepository
 import dagger.Binds
@@ -33,4 +35,10 @@ abstract class RepositoryModule {
     abstract fun bindParkingRepository(
         impl: ParkingRepositoryImpl
     ): ParkingRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindProfileRepository(
+        impl: ProfileRepositoryImpl
+    ): ProfileRepository
 }

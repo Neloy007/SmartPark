@@ -88,12 +88,21 @@ fun HomeScreen(
         bottomBar = {
 
             BottomNavigationBar(
+
                 selectedRoute = Routes.Home,
+
                 onItemSelected = { route ->
-                    if (route != Routes.Home) {
-                        navController.navigate(route)
+
+                    navController.navigate(route) {
+
+                        launchSingleTop = true
+
+                        restoreState = true
+
                     }
+
                 }
+
             )
 
         }
