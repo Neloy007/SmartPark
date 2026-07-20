@@ -3,6 +3,7 @@ package com.example.smartpark.feature_home.presentation
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.smartpark.feature_auth.domain.repository.AuthRepository
+import com.example.smartpark.feature_home.domain.repository.ParkingRepository
 import com.example.smartpark.feature_user.domain.repository.UserRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -17,8 +18,11 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
+
     private val authRepository: AuthRepository,
-    private val userRepository: UserRepository
+    private val userRepository: UserRepository,
+    private val parkingRepository: ParkingRepository
+
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(HomeState())
@@ -35,33 +39,31 @@ class HomeViewModel @Inject constructor(
 
         when (event) {
 
-            HomeEvent.LoadUser -> {
-                loadUser()
-            }
+            HomeEvent.LoadUser -> loadHome()
 
-            HomeEvent.Refresh -> {
-                loadUser()
-            }
+            HomeEvent.Refresh -> loadHome()
 
-            HomeEvent.LogoutClicked -> {
-                logout()
+            HomeEvent.LogoutClicked -> logout()
+
+            is HomeEvent.CategorySelected -> {
+                selectCategory(event.category)
             }
         }
 
     }
 
     /**
-     * Temporary implementation.
-     *
-     * Later this method will load the user profile
-     * from Firestore through UserRepository.
+     * Loads everything required for the Home screen.
      */
-    private fun loadUser() {
+    private fun loadHome() {
 
         viewModelScope.launch {
 
             _state.update {
-                it.copy(isLoading = true)
+                it.copy(
+                    isLoading = true,
+                    error = null
+                )
             }
 
             if (!authRepository.isLoggedIn()) {
@@ -71,54 +73,126 @@ class HomeViewModel @Inject constructor(
                 }
 
                 _effect.emit(HomeEffect.NavigateLogin)
-
                 return@launch
             }
 
-            val result = userRepository.getCurrentUser()
-
-            result
-                .onSuccess { user ->
-
-                    _state.update {
-
-                        it.copy(
-                            isLoading = false,
-                            currentUser = user,
-                            welcomeMessage = "Welcome, ${user.name}"
-                        )
-
-                    }
-
-                }
-                .onFailure { exception ->
-
-                    _state.update {
-                        it.copy(
-                            isLoading =false,
-                            error = exception.message
-                        )
-                    }
-
-                    _effect.emit(
-                        HomeEffect.ShowSnackbar(
-                            exception.message ?: "Unable to load profile."
-                        )
-                    )
-
-                }
+            loadCurrentUser()
 
         }
 
     }
 
+    /**
+     * Loads current user's profile.
+     */
+    private suspend fun loadCurrentUser() {
+
+        userRepository
+            .getCurrentUser()
+            .onSuccess { user ->
+
+                _state.update {
+                    it.copy(
+                        currentUser = user,
+                        welcomeMessage = "Welcome, ${user.name}"
+                    )
+                }
+
+                loadParking()
+
+            }
+            .onFailure { exception ->
+
+                _state.update {
+                    it.copy(
+                        isLoading = false,
+                        error = exception.message
+                    )
+                }
+
+                _effect.emit(
+                    HomeEffect.ShowSnackbar(
+                        exception.message ?: "Unable to load profile."
+                    )
+                )
+
+            }
+
+    }
+
+    /**
+     * Loads nearby parking.
+     */
+    private suspend fun loadParking() {
+
+        parkingRepository
+            .getNearbyParking()
+            .onSuccess { parkingList ->
+
+                _state.update {
+
+                    it.copy(
+                        isLoading = false,
+                        parkingList = parkingList,
+                        filteredParkingList = parkingList
+                    )
+
+                }
+
+            }
+            .onFailure { exception ->
+
+                _state.update {
+
+                    it.copy(
+                        isLoading = false,
+                        parkingList = emptyList(),
+                        filteredParkingList = emptyList(),
+                        error = exception.message
+                    )
+
+                }
+
+                _effect.emit(
+                    HomeEffect.ShowSnackbar(
+                        exception.message ?: "Unable to load nearby parking."
+                    )
+                )
+
+            }
+
+    }
+
+    /**
+     * Changes selected category.
+     *
+     * Filtering logic will be added later.
+     */
+    private fun selectCategory(category: String) {
+
+        _state.update {
+            it.copy(
+                selectedCategory = category
+            )
+        }
+
+        // TODO
+        // filterParking(category)
+
+    }
+
+    /**
+     * Signs out current user.
+     */
     private fun logout() {
 
         viewModelScope.launch {
 
             authRepository.logout()
 
-            _effect.emit(HomeEffect.NavigateLogin)
+            _effect.emit(
+                HomeEffect.NavigateLogin
+            )
 
         }
 

@@ -8,4 +8,8 @@ sealed interface HomeEvent {
 
     data object LogoutClicked : HomeEvent
 
+    data class CategorySelected(
+        val category: String
+    ) : HomeEvent
+
 }

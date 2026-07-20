@@ -55,6 +55,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.example.smartpark.R
+import com.example.smartpark.feature_home.presentation.components.LoadingView
 import com.example.smartpark.navigation.Routes
 
 @Composable
@@ -280,6 +281,18 @@ fun LoginScreen(
                             }
 
                         }
+//                        Box {
+//
+//                            LoginContent()
+//
+//                            if (state.isLoading) {
+//                                LoadingView(
+//                                    modifier = Modifier.matchParentSize(),
+//                                    message = "Signing In..."
+//                                )
+//                            }
+//
+//                        }
 
                         Spacer(modifier = Modifier.height(12.dp))
 

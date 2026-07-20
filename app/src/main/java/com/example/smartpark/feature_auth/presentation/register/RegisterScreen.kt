@@ -12,6 +12,7 @@ import androidx.compose.ui.text.input.*
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.smartpark.feature_home.presentation.components.LoadingView
 import com.example.smartpark.navigation.Routes
 
 @Composable
@@ -241,6 +242,12 @@ fun RegisterScreen(
             } else {
                 Text("Create Account")
             }
+//            if (state.isLoading) {
+//                LoadingView(
+//                    modifier = Modifier.matchParentSize(),
+//                    message = "Creating Account..."
+//                )
+//            }
         }
 
         Spacer(Modifier.height(16.dp))
